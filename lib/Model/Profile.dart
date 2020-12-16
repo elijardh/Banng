@@ -1,3 +1,4 @@
+/*
 class PowerStats {
   final String intelligence;
   final String strength;
@@ -51,7 +52,7 @@ class CharacterImage{
 
 class ComicHero{
   final String response;
-  final int id;
+  final String id;
   final String name;
   final PowerStats powerStats;
   final Biography biography;
@@ -61,4 +62,4 @@ class ComicHero{
   final CharacterImage image;
 
   ComicHero({this.image,this.connections,this.work,this.appearance,this.powerStats,this.biography,this.name,this.id,this.response});
-}
+}*/

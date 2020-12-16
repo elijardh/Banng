@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:bang/Model/Profile.dart';
+import 'package:bang/Model/CharacterProfile.dart';
 import 'package:bang/Controller/Services.dart';
 
 class LandingPage extends StatefulWidget {
@@ -9,7 +9,7 @@ class LandingPage extends StatefulWidget {
 
 class _LandingPageState extends State<LandingPage> {
   bool isloading = true;
-  List<ComicHero> popHeroes = new List<ComicHero>();
+  List<CharacterProfile> popHeroes = new List<CharacterProfile>();
 
   getList() async {
     Popular pop = new Popular();
@@ -51,12 +51,15 @@ class _LandingPageState extends State<LandingPage> {
                           ? Center(
                               child: CircularProgressIndicator(),
                             )
-                          : ListView.builder(itemBuilder: (context, index) {
-                            return popheroes(
-                              popHeroes[index].image.url,
-                              popHeroes[index].name
-                            );
-                      }))
+                          : Container(
+                        height: 100,
+                            child: ListView.builder(itemBuilder: (context, index) {
+                              return popheroes(
+                                //popHeroes[index].image.url,
+                                popHeroes[index].name
+                              );
+                      },scrollDirection: Axis.horizontal,),
+                          ))
                 ],
               ),
             ),
@@ -64,11 +67,11 @@ class _LandingPageState extends State<LandingPage> {
     );
   }
 
-  Widget popheroes(String imageurl, String charactername){
+  Widget popheroes(String charactername){
     return Container(
       child: Stack(
         children: <Widget>[
-          Image.network(imageurl),
+          //Image.network(imageurl),
           Align(
             alignment: Alignment.bottomCenter,
             child: Text(charactername),
