@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:bang/View/LandingPage.dart';
+import 'package:bang/View/Profile.dart';
 
 void main() => runApp(MyApp());
 
@@ -21,7 +22,8 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: LandingPage(),
+      debugShowCheckedModeBanner: false,
+      home: Profile(),
     );
   }
 }

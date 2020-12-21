@@ -46,7 +46,7 @@ class _LandingPageState extends State<LandingPage> {
     return SafeArea(
       child: Scaffold(
         floatingActionButton: FloatingActionButton(onPressed: null, child: Icon(Icons.search, color: Colors.white,),backgroundColor: Color.fromRGBO(203,65,11,1),),
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.white,
           appBar: AppBar(
             title: Text("Bang"),
             backgroundColor:Color.fromRGBO(203,65,11,1),
@@ -64,7 +64,8 @@ class _LandingPageState extends State<LandingPage> {
 
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: Colors.orange,
+
+                        color: Colors.white,
                       ),
                       child: Stack(
                         children: <Widget>[
@@ -83,7 +84,7 @@ class _LandingPageState extends State<LandingPage> {
                           ),
                           Positioned(
                             bottom: 0,
-                              left: 140,
+                              left: 100,
                               child: pageInd()),
                           Container(
                               child: isloading
@@ -94,13 +95,11 @@ class _LandingPageState extends State<LandingPage> {
                                 padding: EdgeInsets.all(20),
                                 decoration: BoxDecoration(
                                 ),
-                                width: MediaQuery.of(context).size.width,
-                                height: MediaQuery.of(context).size.height*0.45,
                                 child: CarouselSlider.builder(itemBuilder: (context, index) {
                                   return randomChar(
                                       randHeroes[index]
                                   );
-                                },itemCount: popHeroes.length,
+                                },itemCount: randHeroes.length,
                                 options: CarouselOptions(
                                   height: MediaQuery.of(context).size.height*0.45,
                                   autoPlay: true,
@@ -124,7 +123,6 @@ class _LandingPageState extends State<LandingPage> {
                     ),
                     Container(
                       decoration: BoxDecoration(
-                        color: Colors.orange,
                         borderRadius: BorderRadius.circular(10)
                       ),
                       height: 150,
@@ -146,7 +144,6 @@ class _LandingPageState extends State<LandingPage> {
                     ),
                     Container(
                         decoration: BoxDecoration(
-                            color: Colors.orange,
                             borderRadius: BorderRadius.circular(10)
                         ),
                         height: 150,
@@ -173,9 +170,8 @@ class _LandingPageState extends State<LandingPage> {
       CharacterProfile characterProfile){
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height*0.25,
       child:Container(child: Image.network(characterProfile.image.url,fit:BoxFit.cover,), decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20)
+          borderRadius: BorderRadius.circular(60)
       ),)
     );
   }
