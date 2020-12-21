@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:bang/Model/CharacterProfile.dart';
 
 class Profile extends StatefulWidget {
+  final CharacterProfile characterProfile;
+  Profile(this.characterProfile);
   @override
-  _ProfileState createState() => _ProfileState();
+  _ProfileState createState() => _ProfileState(characterProfile);
 }
 
 class _ProfileState extends State<Profile> {
+  final CharacterProfile characterProfile;
+  _ProfileState(this.characterProfile);
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -20,8 +25,9 @@ class _ProfileState extends State<Profile> {
                   alignment: Alignment.topLeft,
                 ),
                 Container(
-                  height: 200,
-                  width: 200,
+                  child: Image.network(characterProfile.image.url,fit: BoxFit.cover,),
+                  height: 150,
+                  width: 150,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(100),
                     color: Colors.red
@@ -30,91 +36,140 @@ class _ProfileState extends State<Profile> {
                 SizedBox(
                   height: 10,
                 ),
-                Text("BatMan", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold,),),
-                Text("Bruce", style: TextStyle(fontSize: 16,),),
+                Container(child: Center(child: Text(characterProfile.name, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),)),decoration: BoxDecoration(
+                  color: Color.fromRGBO(203,65,11,1),
+                  borderRadius: BorderRadius.circular(20)
+                ),
+                height: 30,
+                width: 200,),
                 SizedBox(
-                  height:20
+                  height: 10,
+                ),
+                Container(child: Center(child: Text(characterProfile.biography.fullname, style: TextStyle(fontSize: 13,color: Colors.white),)),
+                decoration: BoxDecoration(
+                  color: Color.fromRGBO(203,65,11,1),
+                  borderRadius: BorderRadius.circular(20)
+                ),
+                width: 160,
+                height: 30,),
+                SizedBox(
+                  height:10
                 ),
                 Container(
-                  child:Text("DC")
+                  child:Center(child: Text(characterProfile.biography.publisher, style: TextStyle(color: Colors.white),)),
+                  decoration: BoxDecoration(
+                    color: Color.fromRGBO(203,65,11,1),
+                    borderRadius: BorderRadius.circular(20)
+                  ),
+                  height: 20,
+                  width: 100,
                 ),
                 SizedBox(
                   height: 50,
                 ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Column(
-                      children: <Widget>[
-                        Text("Intelligence"),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Text("10", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-                      ],
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Column(
-                      children: <Widget>[
-                        Text("strength"),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Text("10", style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
-                      ],
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Column(
-                      children: <Widget>[
-                        Text("speed"),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Text("20",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
-                      ],
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Column(
-                      children: <Widget>[
-                        Text("durability"),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Text("20", style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
-                      ],
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Column(
-                      children: <Widget>[
-                        Text("power"),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Text("20", style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
-                      ],
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Column(
-                      children: <Widget>[
-                        Text("combat"),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Text("20", style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
-                      ],
-                    ),
-                  ],
+                Container(
+                  padding: EdgeInsets.only(top: 10),
+                  height: 60,
+                  width: 400,
+                  decoration:BoxDecoration(
+                    color: Color.fromRGBO(203,65,11,1),
+                    borderRadius: BorderRadius.circular(40)
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Column(
+                        children: <Widget>[
+                          Text("Intelligence", style: TextStyle(color: Colors.white),),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text(characterProfile.powerstats.intelligence, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),),
+                        ],
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text("|", style: TextStyle(fontSize: 20),),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Column(
+                        children: <Widget>[
+                          Text("strength", style: TextStyle(color: Colors.white),),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text(characterProfile.powerstats.strength, style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold, color: Colors.white)),
+                        ],
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text("|", style: TextStyle(fontSize: 20),),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Column(
+                        children: <Widget>[
+                          Text("speed", style: TextStyle(color: Colors.white),),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text(characterProfile.powerstats.speed,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold, color: Colors.white)),
+                        ],
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text("|", style: TextStyle(fontSize: 20),),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Column(
+                        children: <Widget>[
+                          Text("durability", style: TextStyle(color: Colors.white),),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text(characterProfile.powerstats.durability, style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold, color: Colors.white)),
+                        ],
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text("|", style: TextStyle(fontSize: 20),),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Column(
+                        children: <Widget>[
+                          Text("power", style: TextStyle(color: Colors.white),),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text(characterProfile.powerstats.power, style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold, color: Colors.white)),
+                        ],
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text("|", style: TextStyle(fontSize: 20),),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Column(
+                        children: <Widget>[
+                          Text("combat", style: TextStyle(color: Colors.white),),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text(characterProfile.powerstats.combat, style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold, color: Colors.white)),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
 
                 SizedBox(
@@ -142,24 +197,24 @@ class _ProfileState extends State<Profile> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Text("Complete Profile", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                              Text("Profile", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),),
                               SizedBox(
                                 height: 10,
                               ),
-                              Text("Biography|Appearance|Connections|Work"),
+                              Text("Biography | Appearance", style: TextStyle(fontSize: 14, color: Colors.white)),
                             ],
                           ),
                           SizedBox(
-                            width: 50,
+                            width: 100,
                           ),
                           Container(
-                            width: 50,
-                              height: 50,
+                            width: 40,
+                              height: 40,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: Colors.red
+                                borderRadius: BorderRadius.circular(15),
+                                color: Colors.white
                               ),
-                              child: Icon(Icons.arrow_forward, size: 30,)),
+                              child: Icon(Icons.arrow_forward, size: 20,)),
                         ],
                       ),
                       
@@ -167,7 +222,7 @@ class _ProfileState extends State<Profile> {
                         height: 100,
                         width: 400,
                         decoration: BoxDecoration(
-                          color: Colors.blue,
+                            color: Color.fromRGBO(203,65,11,1),
                           borderRadius: BorderRadius.circular(30)
                         ),
                         child:Column(
@@ -183,24 +238,25 @@ class _ProfileState extends State<Profile> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    Text("Complete Profile", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                                    Text("More", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),),
                                     SizedBox(
                                       height: 10,
                                     ),
-                                    Text("Biography|Appearance|Connections|Work"),
+                                    Text("Connections | Work", style: TextStyle(fontSize: 14, color: Colors.white),),
                                   ],
                                 ),
                                 SizedBox(
-                                  width: 50,
+                                  width: 130,
                                 ),
                                 Container(
-                                    width: 50,
-                                    height: 50,
+                                    width: 40,
+                                    height: 40,
                                     decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(20),
-                                        color: Colors.red
+                                        //boxShadow: [BoxShadow(color: Colors.grey, offset: Offset(5, 5), blurRadius: 1.0, spreadRadius: 1.0)],
+                                        borderRadius: BorderRadius.circular(15),
+                                        color: Colors.white
                                     ),
-                                    child: Icon(Icons.arrow_forward, size: 30,)),
+                                    child: Icon(Icons.arrow_forward, size: 20,)),
                               ],
                             ),
                           ],
