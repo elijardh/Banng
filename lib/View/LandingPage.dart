@@ -4,6 +4,7 @@ import 'package:bang/Controller/Services.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:page_view_indicators/circle_page_indicator.dart';
 import 'package:bang/View/Profile.dart';
+import 'package:provider/provider.dart';
 
 class LandingPage extends StatefulWidget {
   @override
@@ -11,6 +12,20 @@ class LandingPage extends StatefulWidget {
 }
 
 class _LandingPageState extends State<LandingPage> {
+
+  getData() async{
+    List<CharacterProfile> data = await Provider.of<Popular>(context).getPopular();
+    Provider.of<Popular>(context, listen: false).setPopHero(data);
+  }
+  getVil() async{
+    List<CharacterProfile> popVil = await Provider.of<Villains>(context).getPopular();
+    Provider.of<Villains>(context, listen: false).setPopVil(popVil);
+  }
+
+  getRand() async{
+    List<CharacterProfile> ranChar = await Provider.of<RandomHeroes>(context).getRandom();
+    Provider.of<RandomHeroes>(context, listen: false).setRanChar(ranChar);
+  }
   final curpage = ValueNotifier<int>(0);
   bool isloading = true;
   List<CharacterProfile> popHeroes = new List<CharacterProfile>();
@@ -26,7 +41,7 @@ class _LandingPageState extends State<LandingPage> {
     await vill.getPopular();
     popVil = vill.popularVil;
     randHeroes = randomHeroes.randomHeroes;
-    popHeroes = pop.popularHeroes;
+    //popHeroes = pop.popularHeroes;
     setState(() {
       isloading = false;
     });
@@ -44,12 +59,15 @@ class _LandingPageState extends State<LandingPage> {
   }
   @override
   Widget build(BuildContext context) {
+    getData();
+    getRand();
+    getVil();
     return SafeArea(
       child: Scaffold(
         floatingActionButton: FloatingActionButton(onPressed: null, child: Icon(Icons.search, color: Colors.white,),backgroundColor: Color.fromRGBO(203,65,11,1),),
         backgroundColor: Colors.white,
           appBar: AppBar(
-            title: Text("Bang"),
+            title:Text("Bnag"),
             backgroundColor:Color.fromRGBO(203,65,11,1),
           ),
           body: SingleChildScrollView(
@@ -98,9 +116,9 @@ class _LandingPageState extends State<LandingPage> {
                                 ),
                                 child: CarouselSlider.builder(itemBuilder: (context, index) {
                                   return randomChar(
-                                      randHeroes[index]
+                                      Provider.of<RandomHeroes>(context).randomHeroes[index]
                                   );
-                                },itemCount: randHeroes.length,
+                                },itemCount: Provider.of<RandomHeroes>(context).randomHeroes.length,
                                 options: CarouselOptions(
                                   height: MediaQuery.of(context).size.height*0.45,
                                   autoPlay: true,
@@ -127,10 +145,12 @@ class _LandingPageState extends State<LandingPage> {
                         borderRadius: BorderRadius.circular(10)
                       ),
                       height: 150,
-                        child: ListView.builder(itemBuilder: (BuildContext context, index){
-                          return popheroes(popHeroes[index]);
+                        child: Provider.of<Popular>(context).popHeroes.length == null ? Container(
+                          child: CircularProgressIndicator(),
+                        ) : ListView.builder(itemBuilder: (BuildContext context, index){
+                          return popheroes(Provider.of<Popular>(context).popHeroes[index]);
                         },
-                          itemCount: popHeroes.length,
+                          itemCount: Provider.of<Popular>(context).popHeroes.length,
                           padding: EdgeInsets.all(10),
                           shrinkWrap: true,
                           scrollDirection: Axis.horizontal,
@@ -149,9 +169,11 @@ class _LandingPageState extends State<LandingPage> {
                         ),
                         height: 150,
                         child: ListView.builder(itemBuilder: (BuildContext context, index){
-                          return popheroes(popVil[index]);
+                          return popheroes(
+                              Provider.of<Villains>(context).popularVil[index]
+                          );
                         },
-                          itemCount: popVil.length,
+                          itemCount: Provider.of<Villains>(context).popularVil.length,
                           padding: EdgeInsets.all(10),
                           shrinkWrap: true,
                           scrollDirection: Axis.horizontal,
@@ -177,9 +199,10 @@ class _LandingPageState extends State<LandingPage> {
       },
       child: Container(
         width: MediaQuery.of(context).size.width,
-        child:Container(child: Image.network(characterProfile.image.url,fit:BoxFit.cover,), decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(60)
-        ),)
+        child:Card(child: Image.network(characterProfile.image.url,fit:BoxFit.cover,),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+          clipBehavior: Clip.hardEdge,
+        )
       ),
     );
   }
@@ -205,7 +228,9 @@ class _LandingPageState extends State<LandingPage> {
           child: Stack(
             children: <Widget>[
               Container(
-                child: Image.network(characterProfile.image.url, fit: BoxFit.cover,),
+                child: Card(child: Image.network(characterProfile.image.url, fit: BoxFit.cover,),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                clipBehavior: Clip.hardEdge,),
               ),
               Align(
                 alignment: Alignment.bottomCenter,
@@ -213,8 +238,8 @@ class _LandingPageState extends State<LandingPage> {
                   height: 15,
                   width: 90,
                   decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.8),
-                    borderRadius: BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5)),
+                    //color: Colors.black.withOpacity(0.8),
+                    //borderRadius: BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5)),
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,

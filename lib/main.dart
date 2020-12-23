@@ -1,8 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:bang/View/LandingPage.dart';
 import 'package:bang/View/Profile.dart';
+import 'package:provider/provider.dart';
+import 'Model/CharacterProfile.dart';
+import 'package:bang/Controller/Services.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(MultiProvider(child: MyApp(),
+providers: [
+  //FutureProvider<List<CharacterProfile>>(create: (_) => Popular().getPopular()),
+  ChangeNotifierProvider<Popular>.value(value: Popular()),
+  ChangeNotifierProvider<Villains>.value(value: Villains()),
+  ChangeNotifierProvider<RandomHeroes>.value(value: RandomHeroes()),
+
+],
+));
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.

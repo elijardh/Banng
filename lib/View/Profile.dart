@@ -25,7 +25,9 @@ class _ProfileState extends State<Profile> {
                   alignment: Alignment.topLeft,
                 ),
                 Container(
-                  child: Image.network(characterProfile.image.url,fit: BoxFit.cover,),
+                  child: Card(child: Image.network(characterProfile.image.url,fit: BoxFit.cover,),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
+                  clipBehavior: Clip.hardEdge,),
                   height: 150,
                   width: 150,
                   decoration: BoxDecoration(
@@ -193,28 +195,25 @@ class _ProfileState extends State<Profile> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text("Profile", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Text("Biography | Appearance", style: TextStyle(fontSize: 14, color: Colors.white)),
-                            ],
-                          ),
-                          SizedBox(
-                            width: 100,
-                          ),
                           Container(
+                            height: 60,
+                            width: 400,
+                            child: ExpansionTile(title: Column(
+                              children: <Widget>[
+                                Text("Profile", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),),
+                                Text("Biography | Appearance", style: TextStyle(fontSize: 14, color: Colors.white)),
+                              ],
+                            ),
+                            backgroundColor: Colors.white,),
+                          ),
+/*                          Container(
                             width: 40,
                               height: 40,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(15),
                                 color: Colors.white
                               ),
-                              child: Icon(Icons.arrow_forward, size: 20,)),
+                              child: Icon(Icons.arrow_forward, size: 20,)),*/
                         ],
                       ),
                       
