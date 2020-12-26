@@ -28,6 +28,8 @@ dependencies:
   page_view_indicators: ^1.4.0
   carousel_slider: ^2.3.1
   provider:
+  sqflite:
+  path_provider:
 
 dev_dependencies:
   flutter_test:

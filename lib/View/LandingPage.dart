@@ -51,7 +51,9 @@ class _LandingPageState extends State<LandingPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getList();
+    getData();
+    getRand();
+    getVil();
   }
 
   dynamic hello(int hey, CarouselPageChangedReason wtf){
@@ -59,9 +61,6 @@ class _LandingPageState extends State<LandingPage> {
   }
   @override
   Widget build(BuildContext context) {
-    getData();
-    getRand();
-    getVil();
     return SafeArea(
       child: Scaffold(
         floatingActionButton: FloatingActionButton(onPressed: null, child: Icon(Icons.search, color: Colors.white,),backgroundColor: Color.fromRGBO(203,65,11,1),),
