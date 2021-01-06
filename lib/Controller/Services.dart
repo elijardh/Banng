@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:core';
+
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:bang/Model/CharacterProfile.dart';
@@ -94,17 +97,13 @@ class Villains extends ChangeNotifier {
   }
 }
 
-class RandomHeroes extends ChangeNotifier {
+class RandomHeroes{
   List<CharacterProfile> randomHeroes = [];
 
   getRanChar() {
     return randomHeroes;
   }
 
-  setRanChar(List<CharacterProfile> data) {
-    randomHeroes = data;
-    notifyListeners();
-  }
 
   randomGen(int min, int max) {
     var ran = Random();
@@ -114,8 +113,7 @@ class RandomHeroes extends ChangeNotifier {
     return x.floor();
   }
 
-  Future<List<CharacterProfile>> getRandom() async {
-    List<CharacterProfile> randCha = [];
+  Future<void> getRandom() async {
     List<int> randomHeroId = [];
     for (int i = 0; i < 10; i++) {
       randomHeroId.add(randomGen(1, 700));
@@ -127,17 +125,16 @@ class RandomHeroes extends ChangeNotifier {
       if (response.statusCode == 200) {
         CharacterProfile characterProfile =
             CharacterProfile.fromJson(json.decode(response.body));
-        randCha.add(characterProfile);
+        randomHeroes.add(characterProfile);
       }
     }
-    return randCha;
   }
 }
 
-class DatabaseProvider extends ChangeNotifier {
+/*class DatabaseProvider extends ChangeNotifier {
   DatabaseProvider._();
 
-  static final DatabaseProvider _databaseProvider = DatabaseProvider._();
+  static final DatabaseProvider instance = DatabaseProvider._();
 
   String eyecolor = 'eyecolor';
   String gender = 'gender';
@@ -165,6 +162,8 @@ class DatabaseProvider extends ChangeNotifier {
   String strength = 'strength';
   String base = 'base';
   String occupation = 'occupation';
+  String id = 'apiid';
+  String name = 'name';
 
   static Database db;
 
@@ -176,23 +175,54 @@ class DatabaseProvider extends ChangeNotifier {
     return db;
   }
 
-  initDB() async {
+  Future<Database> initDB() async {
     String databasepath = await getDatabasesPath();
-    String path = join(databasepath, "saves.db");
+    String path = join(databasepath, "sav.db");
 
     var db = await openDatabase(path, version: 1, onCreate: _onCreate);
+    return db;
   }
 
   void _onCreate(Database db, int newVersion) async {
     await db.execute(
-        'CREATE TABLE saved(id INTEGER PRIMARY KEY, $eyecolor TEXT, $combat TEXT, $power TEXT, $durability TEXT, $speed TEXT, $strength TEXT, $intelligence TEXT,$publisher TEXT,$fullname TEXT,$url TEXT,$relatives TEXT,$groupaffiliation TEXT,$placeofbirth TEXT, $firstappearance TEXT, $alteregos TEXT, $alignment TEXT, $race TEXT, $haircolor TEXT, $gender TEXT, $occupation TEXT, $base TEXT)');
+        '''CREATE TABLE Sav(id INTEGER PRIMARY KEY,
+        $eyecolor TEXT,
+        $combat TEXT,
+        $power TEXT,
+        $durability TEXT,
+        $speed TEXT,
+        $strength TEXT,
+        $intelligence TEXT,
+        $publisher TEXT,
+        $fullname TEXT,
+        $url TEXT,
+        $relatives TEXT,
+        $groupaffiliation TEXT,
+        $placeofbirth TEXT,
+        $firstappearance TEXT,
+        $alteregos TEXT,
+        $alignment TEXT,
+        $race TEXT,
+        $haircolor TEXT,
+        $gender TEXT,
+        $occupation TEXT,
+        $base TEXT,
+        $name TEXT,
+        $id TEXT
+        )''');
   }
 
-  saveCharacter(CharacterProfile characterProfile) async {
-    var dbClient = db;
-    var result = await dbClient.rawInsert(
-        'INSERT INTO saved($eyecolor, $combat, $power, $durability, $speed, $strength, $intelligence,$publisher,$fullname,$url,$relatives,$groupaffiliation,$placeofbirth, $firstappearance, $alteregos, $alignment, $race, $haircolor , $gender, $occupation, $base) VALUES(${characterProfile.appearance.eyecolor},${characterProfile.powerstats.combat},${characterProfile.powerstats.power},${characterProfile.powerstats.durability},${characterProfile.powerstats.speed},${characterProfile.powerstats.strength},${characterProfile.powerstats.intelligence},${characterProfile.biography.publisher},${characterProfile.biography.fullname},${characterProfile.image.url},${characterProfile.connections.relatives},${characterProfile.connections.groupaffiliation},${characterProfile.biography.placeofbirth},${characterProfile.biography.firstappearance},${characterProfile.biography.alteregos},${characterProfile.biography.alignment},${characterProfile.appearance.race},${characterProfile.appearance.haircolor},${characterProfile.appearance.gender},${characterProfile.work.occupation},${characterProfile.work.base},)');
-    return result;
+  Future<int> saveCharacter(CharacterProfile characterProfile) async {
+    //var dbClient = this.db;
+    //var result = await dbClient.rawInsert('INSERT INTO saved($eyecolor, $combat, $power, $durability, $speed, $strength, $intelligence,$publisher,$fullname,$url,$relatives,$groupaffiliation,$placeofbirth, $firstappearance, $alteregos, $alignment, $race, $haircolor , $gender, $occupation, $base, $name, $id)''VALUES(${characterProfile.appearance.eyecolor},${characterProfile.powerstats.combat},${characterProfile.powerstats.power},${characterProfile.powerstats.durability},${characterProfile.powerstats.speed},${characterProfile.powerstats.strength},${characterProfile.powerstats.intelligence},${characterProfile.biography.publisher},${characterProfile.biography.fullname},${characterProfile.image.url},${characterProfile.connections.relatives},${characterProfile.connections.groupaffiliation},${characterProfile.biography.placeofbirth},${characterProfile.biography.firstappearance},${characterProfile.biography.alteregos},${characterProfile.biography.alignment},${characterProfile.appearance.race},${characterProfile.appearance.haircolor},${characterProfile.appearance.gender},${characterProfile.work.occupation},${characterProfile.work.base},${characterProfile.name}, ${characterProfile.id})');
+    //client.rawInsert('INSERT INTO Saved( $name )VALUES(${characterProfile.name})')
+
+    var client = await instance.getDb;
+    print(client.toString());
+    var res = await client.rawInsert(
+        '''INSERT INTO Saved($name)
+        VALUES(${characterProfile.name})''');
+    return res;
   }
 
   Future <List<Map<String, dynamic>>> getSavedChar() async {
@@ -201,5 +231,16 @@ class DatabaseProvider extends ChangeNotifier {
     return res;
   }
 
-  Future
-}
+  Future<List<CharacterProfile>> getItAll() async{
+    var list = await getSavedChar();
+
+    int count = list.length;
+
+    List<CharacterProfile> charList = new List<CharacterProfile>();
+
+    for(int i = 0; i< count; i++){
+      charList.add(CharacterProfile.fromJson(list[i]));
+    }
+    return charList;
+  }
+}*/

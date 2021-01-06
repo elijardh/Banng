@@ -5,6 +5,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:page_view_indicators/circle_page_indicator.dart';
 import 'package:bang/View/Profile.dart';
 import 'package:provider/provider.dart';
+import 'package:bang/Controller/Database.dart';
 
 class LandingPage extends StatefulWidget {
   @override
@@ -22,10 +23,6 @@ class _LandingPageState extends State<LandingPage> {
     Provider.of<Villains>(context, listen: false).setPopVil(popVil);
   }
 
-  getRand() async{
-    List<CharacterProfile> ranChar = await Provider.of<RandomHeroes>(context).getRandom();
-    Provider.of<RandomHeroes>(context, listen: false).setRanChar(ranChar);
-  }
   final curpage = ValueNotifier<int>(0);
   bool isloading = true;
   List<CharacterProfile> popHeroes = new List<CharacterProfile>();
@@ -33,15 +30,9 @@ class _LandingPageState extends State<LandingPage> {
   List<CharacterProfile> popVil = new List<CharacterProfile>();
 
   getList() async {
-    Popular pop = new Popular();
     RandomHeroes randomHeroes = new RandomHeroes();
-    Villains vill = new Villains();
-    await pop.getPopular();
     await randomHeroes.getRandom();
-    await vill.getPopular();
-    popVil = vill.popularVil;
     randHeroes = randomHeroes.randomHeroes;
-    //popHeroes = pop.popularHeroes;
     setState(() {
       isloading = false;
     });
@@ -51,16 +42,18 @@ class _LandingPageState extends State<LandingPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getData();
-    getRand();
-    getVil();
+    getList();
   }
+
+
 
   dynamic hello(int hey, CarouselPageChangedReason wtf){
     curpage.value = hey;
   }
   @override
   Widget build(BuildContext context) {
+    getVil();
+    getData();
     return SafeArea(
       child: Scaffold(
         floatingActionButton: FloatingActionButton(onPressed: null, child: Icon(Icons.search, color: Colors.white,),backgroundColor: Color.fromRGBO(203,65,11,1),),
@@ -115,9 +108,9 @@ class _LandingPageState extends State<LandingPage> {
                                 ),
                                 child: CarouselSlider.builder(itemBuilder: (context, index) {
                                   return randomChar(
-                                      Provider.of<RandomHeroes>(context).randomHeroes[index]
+                                      randHeroes[index]
                                   );
-                                },itemCount: Provider.of<RandomHeroes>(context).randomHeroes.length,
+                                },itemCount: randHeroes.length,
                                 options: CarouselOptions(
                                   height: MediaQuery.of(context).size.height*0.45,
                                   autoPlay: true,
@@ -208,6 +201,10 @@ class _LandingPageState extends State<LandingPage> {
 
   Widget popheroes(CharacterProfile characterProfile){
     return GestureDetector(
+      onLongPress: (){
+/*        var hell = _databaseProvider.getItAll();
+        print(hell);*/
+      },
       onTap: (){
         Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context){
           return new Profile(characterProfile);
@@ -233,19 +230,24 @@ class _LandingPageState extends State<LandingPage> {
               ),
               Align(
                 alignment: Alignment.bottomCenter,
-                child: Container(
-                  height: 15,
-                  width: 90,
-                  decoration: BoxDecoration(
-                    //color: Colors.black.withOpacity(0.8),
-                    //borderRadius: BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5)),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Text(characterProfile.name, style: TextStyle(fontSize: 10, color: Colors.white, fontWeight: FontWeight.bold),),
-                    ],
+                child: GestureDetector(
+                  onTap: () async{
+                    DatabaseProvider.instance.save(characterProfile);
+                  },
+                  child: Container(
+                    height: 15,
+                    width: 90,
+                    decoration: BoxDecoration(
+                      //color: Colors.black.withOpacity(0.8),
+                      //borderRadius: BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5)),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Text(characterProfile.name, style: TextStyle(fontSize: 10, color: Colors.white, fontWeight: FontWeight.bold),),
+                      ],
+                    ),
                   ),
                 ),
               )

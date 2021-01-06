@@ -10,8 +10,6 @@ providers: [
   //FutureProvider<List<CharacterProfile>>(create: (_) => Popular().getPopular()),
   ChangeNotifierProvider<Popular>.value(value: Popular()),
   ChangeNotifierProvider<Villains>.value(value: Villains()),
-  ChangeNotifierProvider<RandomHeroes>.value(value: RandomHeroes()),
-
 ],
 ));
 

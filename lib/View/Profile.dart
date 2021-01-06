@@ -16,6 +16,7 @@ class _ProfileState extends State<Profile> {
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
+          padding: EdgeInsets.only(left: 10, right: 10),
           scrollDirection: Axis.vertical,
           child: Container(
             child: Column(
@@ -177,6 +178,7 @@ class _ProfileState extends State<Profile> {
                 SizedBox(
                   height: 40,
                 ),
+/*
                 Container(
                   width: 400,
                   height: 200,
@@ -191,30 +193,26 @@ class _ProfileState extends State<Profile> {
                       SizedBox(
                         height: 10,
                       ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Container(
-                            height: 60,
-                            width: 400,
-                            child: ExpansionTile(title: Column(
-                              children: <Widget>[
-                                Text("Profile", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),),
-                                Text("Biography | Appearance", style: TextStyle(fontSize: 14, color: Colors.white)),
-                              ],
-                            ),
-                            backgroundColor: Colors.white,),
+                      Expanded(
+                        child: Container(
+                          height: 60,
+                          width: 400,
+                          //padding: EdgeInsets.only(left: 40),
+                          child: ExpansionTile(title: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text("Profile", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),),
+                              Text("Biography | Appearance", style: TextStyle(fontSize: 14, color: Colors.white)),
+                            ],
                           ),
-/*                          Container(
-                            width: 40,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15),
-                                color: Colors.white
-                              ),
-                              child: Icon(Icons.arrow_forward, size: 20,)),*/
-                        ],
+                          children: <Widget>[
+                           Row(children: <Widget>[
+                             Text("Alter Egos", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 50),),
+                             Text(characterProfile.biography.alteregos, style: TextStyle(),),
+                           ],)
+                          ],),
+                        ),
                       ),
                       
                       Container(
@@ -264,7 +262,50 @@ class _ProfileState extends State<Profile> {
                     ],
                   ),
                 )
-
+*/
+                Container(
+                  decoration: BoxDecoration(
+                      color: Colors.orange,
+                      borderRadius: BorderRadius.only(topRight: Radius.circular(20), topLeft: Radius.circular(20))
+                  ),
+                  padding: EdgeInsets.only(left: 10, right: 10),
+                  child: ExpansionTile(title: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text("Profile", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),),
+                      Text("Biography | Appearance", style: TextStyle(fontSize: 14, color: Colors.white)),
+                    ],
+                  ),
+                    children: <Widget>[
+                      Row(children: <Widget>[
+                        Text("Alter Egos", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 50),),
+                        Text(characterProfile.biography.alteregos, style: TextStyle(),),
+                      ],)
+                    ],),
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                      color: Colors.orange,
+                      borderRadius: BorderRadius.only(bottomRight: Radius.circular(20), bottomLeft: Radius.circular(20))
+                  ),
+                  padding: EdgeInsets.only(left: 10, right: 10),
+                  child: ExpansionTile(title: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text("Profile", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),),
+                      Text("Biography | Appearance", style: TextStyle(fontSize: 14, color: Colors.white)),
+                    ],
+                  ),
+                    children: <Widget>[
+                      SizedBox(height: 5,),
+                      Row(children: <Widget>[
+                        Text("Alter Egos", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),),
+                        Container(child: Text(characterProfile.biography.alteregos, style: TextStyle(),)),
+                      ],)
+                    ],),
+                ),
               ],
             ),
           ),
