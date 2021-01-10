@@ -6,6 +6,8 @@ import 'package:page_view_indicators/circle_page_indicator.dart';
 import 'package:bang/View/Profile.dart';
 import 'package:provider/provider.dart';
 import 'package:bang/Controller/Database.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:bang/View/Widgets.dart';
 
 class LandingPage extends StatefulWidget {
   @override
@@ -56,86 +58,107 @@ class _LandingPageState extends State<LandingPage> {
     getData();
     return SafeArea(
       child: Scaffold(
-        floatingActionButton: FloatingActionButton(onPressed: null, child: Icon(Icons.search, color: Colors.white,),backgroundColor: Color.fromRGBO(203,65,11,1),),
+        floatingActionButton: FloatingActionButton(onPressed: null, child: Icon(Icons.search, color: Colors.white,),backgroundColor: Colors.grey[400],),
         backgroundColor: Colors.white,
           appBar: AppBar(
-            title:Text("Bnag"),
-            backgroundColor:Color.fromRGBO(203,65,11,1),
+            centerTitle: true,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10))
+            ),
+            title:Text("Bang", style: TextStyle(letterSpacing: 5, fontSize: 30, color: Colors.grey[400]),),
+            backgroundColor:Colors.white,
           ),
           body: SingleChildScrollView(
             scrollDirection: Axis.vertical,
             child: Column(
               children: <Widget>[
+                SizedBox(height: 5,),
                 Column(
                   children: <Widget>[
+                    Container(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left:8.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            Row(
+                              children: <Widget>[
+                                Text("Explore", style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.grey[400], letterSpacing: 5),textAlign: TextAlign.start,),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Row(
+                              children: <Widget>[
+                                Text("More Characters", style: TextStyle(fontSize: 16, color: Colors.grey[400], letterSpacing: 5),),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                     SizedBox(
                       height: 5,
                     ),
                     Container(
-
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-
-                        color: Colors.white,
-                      ),
-                      child: Stack(
-                        children: <Widget>[
-                          Center(
-                            child: Container(
-                              margin: EdgeInsets.only(top:4),
-                              height: 11,
-                              width: 150,
-                              decoration: BoxDecoration(
-                                color: Color.fromRGBO(203,65,11,1),
-                                borderRadius: BorderRadius.circular(20)
-                              ),
-                              
-                              child: Center(child: Text("Explore", style: TextStyle(fontSize: 10, color: Colors.white, fontWeight: FontWeight.bold),)),
+                      child: Container(
+                          child: isloading
+                              ? Container(
+                            child: CircularProgressIndicator(),
+                          )
+                              : Container(
+                            height: 250,
+                            width: MediaQuery.of(context).size.width,
+                            decoration: BoxDecoration(
                             ),
-                          ),
-                          Positioned(
-                            bottom: 0,
-                              left: 100,
-                              child: pageInd()),
-                          Container(
-                              child: isloading
-                                  ? Center(
-                                child: CircularProgressIndicator(),
-                              )
-                                  : Container(
-                                padding: EdgeInsets.all(20),
-                                decoration: BoxDecoration(
-                                ),
-                                child: CarouselSlider.builder(itemBuilder: (context, index) {
-                                  return randomChar(
-                                      randHeroes[index]
-                                  );
-                                },itemCount: randHeroes.length,
-                                options: CarouselOptions(
-                                  height: MediaQuery.of(context).size.height*0.45,
-                                  autoPlay: true,
-                                  enlargeCenterPage: true,
-                                  pageSnapping: true,
-                                  enableInfiniteScroll: true,
-                                  scrollDirection: Axis.horizontal,
-                                  onPageChanged: hello,
-                                ),),
-                              )),
+                            child: Swiper(itemCount:randHeroes.length,
+                            autoplay: true,
+                            loop: true,
+                            pagination: SwiperPagination(
+                              builder: DotSwiperPaginationBuilder(
+                                space: 10,
+                                activeColor: Colors.grey[400],
 
+                              ),
+                              alignment: Alignment.bottomCenter,
+                            ),
+                            //pagination:DotSwiperPaginationBuilder() ,
+                            layout: SwiperLayout.DEFAULT,
+                                itemBuilder: (context, index) {
+                                  return randomHeroesWidget(randHeroes[index]);
+                                })
+                            /*CarouselSlider.builder(itemBuilder: (context, index) {
+                              return randomChar(
+                                  randHeroes[index]
+                              );
+                            },itemCount: randHeroes.length,
+                            options: CarouselOptions(
+                              height: MediaQuery.of(context).size.height*0.45,
+                              autoPlay: true,
+                              enlargeCenterPage: true,
+                              pageSnapping: true,
+                              enableInfiniteScroll: true,
+                              scrollDirection: Axis.horizontal,
+                              onPageChanged: hello,
+                            ),),*/
+                          )),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left:8.0),
+                      child: Row(
+                        children: <Widget>[
+                          Text("Popular Heroes", style: TextStyle(fontSize: 20, color: Colors.grey[400], fontWeight: FontWeight.bold, letterSpacing: 5),),
                         ],
                       ),
                     ),
                     SizedBox(
-                      height: 1,
-                    ),
-                    Container(child: Text("Popular Heroes", style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold),), padding: EdgeInsets.only(left:10), decoration: BoxDecoration(color: Color.fromRGBO(203,65,11,1),), width: 400,),
-                    SizedBox(
-                      height: 1,
+                      height: 5,
                     ),
                     Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10)
-                      ),
                       height: 150,
                         child: Provider.of<Popular>(context).popHeroes.length == null ? Container(
                           child: CircularProgressIndicator(),
@@ -143,22 +166,26 @@ class _LandingPageState extends State<LandingPage> {
                           return popheroes(Provider.of<Popular>(context).popHeroes[index]);
                         },
                           itemCount: Provider.of<Popular>(context).popHeroes.length,
-                          padding: EdgeInsets.all(10),
                           shrinkWrap: true,
                           scrollDirection: Axis.horizontal,
+                          padding: EdgeInsets.only(right: 8),
                         )
                     ),
                     SizedBox(
-                      height: 1,
+                      height: 5,
                     ),
-                    Container(child: Text("Popular Villains", style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold),), padding: EdgeInsets.only(left:10), decoration: BoxDecoration(color: Color.fromRGBO(203,65,11,1),), width: 400,),
+                    Padding(
+                      padding: const EdgeInsets.only(left:8.0),
+                      child: Row(
+                        children: <Widget>[
+                          Text("Popular Villains", style: TextStyle(fontSize: 20, letterSpacing: 5,color: Colors.grey[400], fontWeight: FontWeight.bold),),
+                        ],
+                      ),
+                    ),
                     SizedBox(
-                      height: 1,
+                      height: 5,
                     ),
                     Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10)
-                        ),
                         height: 150,
                         child: ListView.builder(itemBuilder: (BuildContext context, index){
                           return popheroes(
@@ -166,7 +193,6 @@ class _LandingPageState extends State<LandingPage> {
                           );
                         },
                           itemCount: Provider.of<Villains>(context).popularVil.length,
-                          padding: EdgeInsets.all(10),
                           shrinkWrap: true,
                           scrollDirection: Axis.horizontal,
                         )
@@ -189,12 +215,24 @@ class _LandingPageState extends State<LandingPage> {
           return new Profile(characterProfile);
         }));
       },
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        child:Card(child: Image.network(characterProfile.image.url,fit:BoxFit.cover,),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-          clipBehavior: Clip.hardEdge,
-        )
+      child: Padding(
+        padding: const EdgeInsets.all(3.0),
+        child: Container(
+          child:Stack(
+            children: <Widget>[
+              Column(
+                children: <Widget>[
+                  Text(characterProfile.biography.publisher, style:TextStyle(fontSize: 20,)),
+                  Text(characterProfile.name, style:TextStyle(fontSize: 16,))
+                ],
+              ),
+              Card(child: Image.network(characterProfile.image.url,fit:BoxFit.cover,),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+                clipBehavior: Clip.hardEdge,
+              ),
+            ],
+          )
+        ),
       ),
     );
   }
@@ -211,45 +249,37 @@ class _LandingPageState extends State<LandingPage> {
         }));
       },
       child: Container(
-        height: 150,
-        width: 90,
-        padding: EdgeInsets.all(2),
+        height: 100,
+        width: 100,
+        padding: EdgeInsets.all(5),
         child: Container(
           decoration: BoxDecoration(
-              color: Color.fromRGBO(203,65,11,1),
-              borderRadius: BorderRadius.circular(10)
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [
+                BoxShadow(
+                  color: Color.fromRGBO(143, 148, 251, 1),
+                  blurRadius: 5.0,
+                  //offset: Offset(0, 10)
+                )
+              ]
           ),
 
-          padding: EdgeInsets.all(5),
-          child: Stack(
+          child: Column(
             children: <Widget>[
               Container(
                 child: Card(child: Image.network(characterProfile.image.url, fit: BoxFit.cover,),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(80)),
                 clipBehavior: Clip.hardEdge,),
               ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: GestureDetector(
-                  onTap: () async{
-                    DatabaseProvider.instance.save(characterProfile);
-                  },
-                  child: Container(
-                    height: 15,
-                    width: 90,
-                    decoration: BoxDecoration(
-                      //color: Colors.black.withOpacity(0.8),
-                      //borderRadius: BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5)),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Text(characterProfile.name, style: TextStyle(fontSize: 10, color: Colors.white, fontWeight: FontWeight.bold),),
-                      ],
-                    ),
-                  ),
-                ),
+              SizedBox(
+                height: 5,
+              ),
+              GestureDetector(
+                onTap: () async{
+                  DatabaseProvider.instance.save(characterProfile);
+                },
+                child: Text(characterProfile.name, style: TextStyle(fontSize: 10, color: Colors.grey[400], fontWeight: FontWeight.bold, letterSpacing: 3),),
               )
             ],
           ),

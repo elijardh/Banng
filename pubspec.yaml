@@ -30,6 +30,7 @@ dependencies:
   provider:
   sqflite:
   path_provider:
+  flutter_swiper:
 
 dev_dependencies:
   flutter_test:
