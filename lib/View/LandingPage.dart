@@ -68,6 +68,7 @@ class _LandingPageState extends State<LandingPage> {
         backgroundColor: Colors.white,
           appBar: AppBar(
             centerTitle: true,
+            elevation: 0,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10))
             ),
@@ -109,11 +110,7 @@ class _LandingPageState extends State<LandingPage> {
                     ),
                     Container(
                       child: Container(
-                          child: isloading
-                              ? Container(
-                            child: CircularProgressIndicator(),
-                          )
-                              : Container(
+                          child: Container(
                             height: 250,
                             width: MediaQuery.of(context).size.width,
                             decoration: BoxDecoration(
