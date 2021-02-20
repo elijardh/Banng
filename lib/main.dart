@@ -3,6 +3,8 @@ import 'package:bang/View/LandingPage.dart';
 import 'package:bang/View/Profile.dart';
 import 'package:provider/provider.dart';
 import 'Model/CharacterProfile.dart';
+import 'package:bang/utils/envConfig.dart';
+import 'package:bang/utils/size_config.dart';
 import 'package:bang/Controller/Services.dart';
 
 void main() => runApp(MultiProvider(child: MyApp(),
@@ -32,7 +34,16 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       debugShowCheckedModeBanner: false,
-      home: LandingPage(),
+      home: Builder(builder: (BuildContext context) {
+
+        BuildEnvironment.init(flavor: BuildFlavor.development);
+
+        Size size = MediaQuery.of(context).size;
+        SizeConfig.init(context, width: size.width, height: size.height, allowFontScaling: true);
+
+        return LandingPage();
+
+      }),
     );
   }
 }

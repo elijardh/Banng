@@ -115,6 +115,7 @@ class _LandingPageState extends State<LandingPage> {
                             child: Swiper(itemCount:randHeroes.length,
                             autoplay: true,
                             loop: true,
+
                             pagination: SwiperPagination(
                               builder: DotSwiperPaginationBuilder(
                                 space: 10,
@@ -128,20 +129,6 @@ class _LandingPageState extends State<LandingPage> {
                                 itemBuilder: (context, index) {
                                   return randomHeroesWidget(randHeroes[index]);
                                 })
-                            /*CarouselSlider.builder(itemBuilder: (context, index) {
-                              return randomChar(
-                                  randHeroes[index]
-                              );
-                            },itemCount: randHeroes.length,
-                            options: CarouselOptions(
-                              height: MediaQuery.of(context).size.height*0.45,
-                              autoPlay: true,
-                              enlargeCenterPage: true,
-                              pageSnapping: true,
-                              enableInfiniteScroll: true,
-                              scrollDirection: Axis.horizontal,
-                              onPageChanged: hello,
-                            ),),*/
                           )),
                     ),
                     SizedBox(

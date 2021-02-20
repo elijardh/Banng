@@ -31,6 +31,8 @@ dependencies:
   sqflite:
   path_provider:
   flutter_swiper:
+  flutter_bloc: ^0.15.1
+  equatable: ^0.2.6
 
 dev_dependencies:
   flutter_test:
