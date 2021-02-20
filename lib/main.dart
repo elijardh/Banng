@@ -9,7 +9,6 @@ import 'package:bang/Controller/Services.dart';
 
 void main() => runApp(MultiProvider(child: MyApp(),
 providers: [
-  //FutureProvider<List<CharacterProfile>>(create: (_) => Popular().getPopular()),
   ChangeNotifierProvider<Popular>.value(value: Popular()),
   ChangeNotifierProvider<Villains>.value(value: Villains()),
 ],

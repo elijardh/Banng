@@ -1,13 +1,18 @@
+import 'package:bang/widgets/texts.dart';
 import 'package:flutter/material.dart';
 import 'package:bang/Model/CharacterProfile.dart';
 import 'package:bang/Controller/Services.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:page_view_indicators/circle_page_indicator.dart';
 import 'package:bang/View/Profile.dart';
 import 'package:provider/provider.dart';
 import 'package:bang/Controller/Database.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:bang/View/Widgets.dart';
+import 'package:bloc/bloc.dart';
+
+import 'ViewModel/LandingPageViewModel/random_bloc.dart';
 
 class LandingPage extends StatefulWidget {
   @override
@@ -16,6 +21,7 @@ class LandingPage extends StatefulWidget {
 
 class _LandingPageState extends State<LandingPage> {
 
+  RandomBloc _randomBloc = new RandomBloc();
   getData() async{
     List<CharacterProfile> data = await Provider.of<Popular>(context).getPopular();
     Provider.of<Popular>(context, listen: false).setPopHero(data);
@@ -31,20 +37,20 @@ class _LandingPageState extends State<LandingPage> {
   List<CharacterProfile> randHeroes = new List<CharacterProfile>();
   List<CharacterProfile> popVil = new List<CharacterProfile>();
 
-  getList() async {
+/*  getList() async {
     RandomHeroes randomHeroes = new RandomHeroes();
     await randomHeroes.getRandom();
     randHeroes = randomHeroes.randomHeroes;
     setState(() {
       isloading = false;
     });
-  }
+  }*/
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getList();
+    _randomBloc.dispatch(GetRandomChar());
   }
 
 
@@ -112,23 +118,69 @@ class _LandingPageState extends State<LandingPage> {
                             width: MediaQuery.of(context).size.width,
                             decoration: BoxDecoration(
                             ),
-                            child: Swiper(itemCount:randHeroes.length,
-                            autoplay: true,
-                            loop: true,
+                            child: BlocBuilder(
+                              bloc: _randomBloc,
+                              builder: (BuildContext context, RandomState state){
+                                if(state is RandomInitial){
+                                  return Container(
+                                    child: Center(
+                                      child: TitleText(
+                                        text: "Waiting for connection....",
+                                      )
+                                    ),
+                                  );
+                                }
+                                else if(state is RandomLoading){
+                                  return CircularProgressIndicator();
+                                }
+                                else if(state is RandomLoaded){
+                                  return Swiper(itemCount:state.randomList.length,
+                                      autoplay: true,
+                                      loop: true,
 
-                            pagination: SwiperPagination(
-                              builder: DotSwiperPaginationBuilder(
-                                space: 10,
-                                activeColor: Colors.grey[400],
+                                      pagination: SwiperPagination(
+                                        builder: DotSwiperPaginationBuilder(
+                                          space: 10,
+                                          activeColor: Colors.grey[400],
 
+                                        ),
+                                        alignment: Alignment.bottomCenter,
+                                      ),
+                                      //pagination:DotSwiperPaginationBuilder() ,
+                                      layout: SwiperLayout.DEFAULT,
+                                      itemBuilder: (context, index) {
+                                        return randomHeroesWidget(state.randomList[index]);
+                                      });
+                                }
+                                else{
+                                  return Container(
+                                    child: Center(
+                                        child: TitleText(
+                                          text: "Bad Network....",
+                                        )
+                                    ),
+                                  );
+                                }
+                              },
+
+                              /*child: Swiper(itemCount:randHeroes.length,
+                              autoplay: true,
+                              loop: true,
+
+                              pagination: SwiperPagination(
+                                builder: DotSwiperPaginationBuilder(
+                                  space: 10,
+                                  activeColor: Colors.grey[400],
+
+                                ),
+                                alignment: Alignment.bottomCenter,
                               ),
-                              alignment: Alignment.bottomCenter,
-                            ),
-                            //pagination:DotSwiperPaginationBuilder() ,
-                            layout: SwiperLayout.DEFAULT,
-                                itemBuilder: (context, index) {
-                                  return randomHeroesWidget(randHeroes[index]);
-                                })
+                              //pagination:DotSwiperPaginationBuilder() ,
+                              layout: SwiperLayout.DEFAULT,
+                                  itemBuilder: (context, index) {
+                                    return randomHeroesWidget(randHeroes[index]);
+                                  }),*/
+                            )
                           )),
                     ),
                     SizedBox(

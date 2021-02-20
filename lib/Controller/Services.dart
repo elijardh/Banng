@@ -113,8 +113,9 @@ class RandomHeroes{
     return x.floor();
   }
 
-  Future<void> getRandom() async {
+  Future<List<CharacterProfile>> getRandom() async {
     List<int> randomHeroId = [];
+    List<CharacterProfile> randomHeroList = [];
     for (int i = 0; i < 10; i++) {
       randomHeroId.add(randomGen(1, 700));
     }
@@ -123,11 +124,11 @@ class RandomHeroes{
           "https://superheroapi.com/api/1907388712734798/${randomHeroId[i]}";
       var response = await http.get(url);
       if (response.statusCode == 200) {
-        CharacterProfile characterProfile =
-            CharacterProfile.fromJson(json.decode(response.body));
-        randomHeroes.add(characterProfile);
+        CharacterProfile characterProfile = CharacterProfile.fromJson(json.decode(response.body));
+        randomHeroList.add(characterProfile);
       }
     }
+    return randomHeroList;
   }
 }
 
