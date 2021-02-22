@@ -1,3 +1,4 @@
+import 'package:bang/utils/size_config.dart';
 import 'package:bang/widgets/texts.dart';
 import 'package:flutter/material.dart';
 import 'package:bang/Model/CharacterProfile.dart';
@@ -14,6 +15,7 @@ import 'package:bloc/bloc.dart';
 
 import 'ViewModel/LandingPageViewModel/random_bloc.dart';
 import 'ViewModel/PopularHeroesViewModel/popular_heroes_bloc.dart';
+import 'package:bang/View/ViewModel/PopularVillainViewModel/popular_villain_bloc.dart';
 
 class LandingPage extends StatefulWidget {
   @override
@@ -24,11 +26,8 @@ class _LandingPageState extends State<LandingPage> {
 
   RandomBloc _randomBloc = new RandomBloc();
   PopularHeroesBloc _popularHeroesBloc = new PopularHeroesBloc();
+  PopularVillainBloc _popularVillainBloc = new PopularVillainBloc();
 
-  getVil() async{
-    List<CharacterProfile> popVil = await Provider.of<Villains>(context).getPopular();
-    Provider.of<Villains>(context, listen: false).setPopVil(popVil);
-  }
 
   final curpage = ValueNotifier<int>(0);
   List<CharacterProfile> popHeroes = new List<CharacterProfile>();
@@ -50,6 +49,7 @@ class _LandingPageState extends State<LandingPage> {
     super.initState();
     _randomBloc.dispatch(GetRandomChar());
     _popularHeroesBloc.dispatch(GetPopularHeroes());
+    _popularVillainBloc.dispatch(GetPopVil());
   }
 
 
@@ -57,14 +57,14 @@ class _LandingPageState extends State<LandingPage> {
   dynamic hello(int hey, CarouselPageChangedReason wtf){
     curpage.value = hey;
   }
+  SizeConfig config = new SizeConfig();
   @override
   Widget build(BuildContext context) {
-    getVil();
     return SafeArea(
       child: Scaffold(
         floatingActionButton: FloatingActionButton(onPressed: null, child: Icon(Icons.search, color: Colors.white,),backgroundColor: Colors.grey[400],),
         backgroundColor: Colors.white,
-          appBar: AppBar(
+/*          appBar: AppBar(
             centerTitle: true,
             elevation: 0,
             shape: RoundedRectangleBorder(
@@ -72,15 +72,15 @@ class _LandingPageState extends State<LandingPage> {
             ),
             title:Text("Bang", style: TextStyle(letterSpacing: 5, fontSize: 30, color: Colors.grey[400]),),
             backgroundColor:Colors.white,
-          ),
+          ),*/
           body: SingleChildScrollView(
             scrollDirection: Axis.vertical,
             child: Column(
               children: <Widget>[
-                SizedBox(height: 5,),
+                //SizedBox(height: 5,),
                 Column(
                   children: <Widget>[
-                    Container(
+/*                    Container(
                       child: Padding(
                         padding: const EdgeInsets.only(left:8.0),
                         child: Column(
@@ -102,14 +102,14 @@ class _LandingPageState extends State<LandingPage> {
                           ],
                         ),
                       ),
-                    ),
-                    SizedBox(
+                    ),*/
+/*                    SizedBox(
                       height: 5,
-                    ),
+                    ),*/
                     Container(
                       child: Container(
                           child: Container(
-                            height: 250,
+                            height: config.sh(400),
                             width: MediaQuery.of(context).size.width,
                             decoration: BoxDecoration(
                             ),
@@ -136,7 +136,10 @@ class _LandingPageState extends State<LandingPage> {
                                       pagination: SwiperPagination(
                                         builder: DotSwiperPaginationBuilder(
                                           space: 10,
-                                          activeColor: Colors.grey[400],
+                                          activeColor: Colors.white,
+                                          activeSize: 10,
+                                          size: 5,
+                                          color: Colors.black
 
                                         ),
                                         alignment: Alignment.bottomCenter,
@@ -253,7 +256,40 @@ class _LandingPageState extends State<LandingPage> {
                     ),
                     Container(
                         height: 150,
-                        child: ListView.builder(itemBuilder: (BuildContext context, index){
+                        child: BlocBuilder(
+                          bloc: _popularVillainBloc,
+                          builder: (BuildContext context, PopularVillainState state){
+                            if(state is PopularVillainInitial){
+                              return Container(
+                                child: Center(
+                                  child: NormalText(
+                                    text:"Awaiting Internet"
+                                  ),
+                                ),
+                              );
+                            }
+                            else if(state is PopularVillainLoading){
+                              return Container(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                            else if(state is PopularVillainLoaded){
+                              ListView.builder(itemBuilder: (BuildContext context, index){
+                                return popheroes(state.list[index]);
+
+                              },
+                                itemCount: state.list.length,
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                              );
+                            }
+                            else{
+                              return CircularProgressIndicator();
+                            }
+                          },
+                        )
+
+                      /*ListView.builder(itemBuilder: (BuildContext context, index){
                           return popheroes(
                               Provider.of<Villains>(context).popularVil[index]
                           );
@@ -261,7 +297,7 @@ class _LandingPageState extends State<LandingPage> {
                           itemCount: Provider.of<Villains>(context).popularVil.length,
                           shrinkWrap: true,
                           scrollDirection: Axis.horizontal,
-                        )
+                        )*/
                     ),
 
                   ],

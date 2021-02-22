@@ -43,17 +43,8 @@ class Popular {
   }
 }
 
-class Villains extends ChangeNotifier {
+class Villains {
   List<CharacterProfile> popularVil = [];
-
-  getPopVil() {
-    return popularVil;
-  }
-
-  setPopVil(List<CharacterProfile> data) {
-    popularVil = data;
-    notifyListeners();
-  }
 
   Future<List<CharacterProfile>> getPopular() async {
     List<CharacterProfile> popvil = [];

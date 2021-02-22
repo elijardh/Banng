@@ -6,10 +6,10 @@ Widget randomHeroesWidget(CharacterProfile characterProfile){
     decoration: BoxDecoration(
       image: DecorationImage(
         image: NetworkImage(characterProfile.image.url),
-        fit: BoxFit.cover,
+        fit: BoxFit.fill,
       )
     ),
-    child: AspectRatio(aspectRatio: 2,
-        child: Image.network(characterProfile.image.url,fit: BoxFit.cover,gaplessPlayback: true,)),
+   /* child: AspectRatio(aspectRatio: 2,
+        child: Image.network(characterProfile.image.url,fit: BoxFit.cover,gaplessPlayback: true,)),*/
   );
 }
