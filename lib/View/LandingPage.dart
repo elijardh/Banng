@@ -255,28 +255,27 @@ class _LandingPageState extends State<LandingPage> {
                       height: 5,
                     ),
                     Container(
-                        height: 150,
+                        height: config.sh(150),
+                        width: SizeConfig.screenWidthDp,
                         child: BlocBuilder(
                           bloc: _popularVillainBloc,
-                          builder: (BuildContext context, PopularVillainState state){
+                          builder: (BuildContext context, PopularVillainState state) {
                             if(state is PopularVillainInitial){
                               return Container(
                                 child: Center(
-                                  child: NormalText(
-                                    text:"Awaiting Internet"
-                                  ),
+                                    child: TitleText(
+                                      text: "Waiting for connection....",
+                                    )
                                 ),
                               );
                             }
                             else if(state is PopularVillainLoading){
-                              return Container(
-                                child: CircularProgressIndicator(),
-                              );
+                              return CircularProgressIndicator();
                             }
                             else if(state is PopularVillainLoaded){
-                              ListView.builder(itemBuilder: (BuildContext context, index){
-                                return popheroes(state.list[index]);
-
+                              return ListView.builder(itemBuilder: (BuildContext context, index){
+                                return popheroes(state.list[index]
+                                );
                               },
                                 itemCount: state.list.length,
                                 shrinkWrap: true,
@@ -284,9 +283,16 @@ class _LandingPageState extends State<LandingPage> {
                               );
                             }
                             else{
-                              return CircularProgressIndicator();
+                              return Container(
+                                child: Center(
+                                    child: TitleText(
+                                      text: "Bad Network....",
+                                    )
+                                ),
+                              );
                             }
                           },
+
                         )
 
                       /*ListView.builder(itemBuilder: (BuildContext context, index){
