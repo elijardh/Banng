@@ -13,6 +13,7 @@ import 'package:bang/View/Widgets.dart';
 import 'package:bloc/bloc.dart';
 
 import 'ViewModel/LandingPageViewModel/random_bloc.dart';
+import 'ViewModel/PopularHeroesViewModel/popular_heroes_bloc.dart';
 
 class LandingPage extends StatefulWidget {
   @override
@@ -22,17 +23,14 @@ class LandingPage extends StatefulWidget {
 class _LandingPageState extends State<LandingPage> {
 
   RandomBloc _randomBloc = new RandomBloc();
-  getData() async{
-    List<CharacterProfile> data = await Provider.of<Popular>(context).getPopular();
-    Provider.of<Popular>(context, listen: false).setPopHero(data);
-  }
+  PopularHeroesBloc _popularHeroesBloc = new PopularHeroesBloc();
+
   getVil() async{
     List<CharacterProfile> popVil = await Provider.of<Villains>(context).getPopular();
     Provider.of<Villains>(context, listen: false).setPopVil(popVil);
   }
 
   final curpage = ValueNotifier<int>(0);
-  bool isloading = true;
   List<CharacterProfile> popHeroes = new List<CharacterProfile>();
   List<CharacterProfile> randHeroes = new List<CharacterProfile>();
   List<CharacterProfile> popVil = new List<CharacterProfile>();
@@ -51,6 +49,7 @@ class _LandingPageState extends State<LandingPage> {
     // TODO: implement initState
     super.initState();
     _randomBloc.dispatch(GetRandomChar());
+    _popularHeroesBloc.dispatch(GetPopularHeroes());
   }
 
 
@@ -61,7 +60,6 @@ class _LandingPageState extends State<LandingPage> {
   @override
   Widget build(BuildContext context) {
     getVil();
-    getData();
     return SafeArea(
       child: Scaffold(
         floatingActionButton: FloatingActionButton(onPressed: null, child: Icon(Icons.search, color: Colors.white,),backgroundColor: Colors.grey[400],),
@@ -196,7 +194,39 @@ class _LandingPageState extends State<LandingPage> {
                     ),
                     Container(
                       height: 150,
-                        child: Provider.of<Popular>(context).popHeroes.length == null ? Container(
+                        child: BlocBuilder(
+                          bloc: _popularHeroesBloc,
+                          builder: (BuildContext context, PopularHeroesState state ){
+                            if(state is PopularHeroesInitial){
+                              return Container(
+                                child: Center(
+                                  child: NormalText(
+                                    text:"Awaiting Internet"
+                                  ),
+                                ),
+                              );
+                            }
+                            else if(state is PopularHeroesLoading){
+                              return Container(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                            else if(state is PopularHeroesLoaded){
+                              return ListView.builder(itemBuilder: (BuildContext context, index){
+                                return popheroes(state.heroList[index]);
+                              },
+                                itemCount: state.heroList.length,
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                padding: EdgeInsets.only(right: 8),
+                              );
+                            }
+                            else{
+                              return CircularProgressIndicator();
+                            }
+                          },
+                        )
+                      /*Provider.of<Popular>(context).popHeroes.length == null ? Container(
                           child: CircularProgressIndicator(),
                         ) : ListView.builder(itemBuilder: (BuildContext context, index){
                           return popheroes(Provider.of<Popular>(context).popHeroes[index]);
@@ -205,7 +235,7 @@ class _LandingPageState extends State<LandingPage> {
                           shrinkWrap: true,
                           scrollDirection: Axis.horizontal,
                           padding: EdgeInsets.only(right: 8),
-                        )
+                        )*/
                     ),
                     SizedBox(
                       height: 5,

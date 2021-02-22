@@ -7,12 +7,7 @@ import 'package:bang/utils/envConfig.dart';
 import 'package:bang/utils/size_config.dart';
 import 'package:bang/Controller/Services.dart';
 
-void main() => runApp(MultiProvider(child: MyApp(),
-providers: [
-  ChangeNotifierProvider<Popular>.value(value: Popular()),
-  ChangeNotifierProvider<Villains>.value(value: Villains()),
-],
-));
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.

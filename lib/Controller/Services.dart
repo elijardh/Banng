@@ -9,17 +9,7 @@ import 'dart:math';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
-class Popular extends ChangeNotifier {
-  List<CharacterProfile> popHeroes = [];
-
-  getPopHero() {
-    return popHeroes;
-  }
-
-  setPopHero(List<CharacterProfile> data) {
-    popHeroes = data;
-    notifyListeners();
-  }
+class Popular {
 
   Future<List<CharacterProfile>> getPopular() async {
     List<CharacterProfile> popularHeroes = [];
