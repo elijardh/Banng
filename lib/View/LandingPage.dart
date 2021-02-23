@@ -1,5 +1,6 @@
 import 'package:bang/utils/size_config.dart';
 import 'package:bang/widgets/texts.dart';
+import 'package:bang/widgets/y_margin.dart';
 import 'package:flutter/material.dart';
 import 'package:bang/Model/CharacterProfile.dart';
 import 'package:bang/Controller/Services.dart';
@@ -13,6 +14,7 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:bang/View/Widgets.dart';
 import 'package:bloc/bloc.dart';
 
+import 'Search.dart';
 import 'ViewModel/LandingPageViewModel/random_bloc.dart';
 import 'ViewModel/PopularHeroesViewModel/popular_heroes_bloc.dart';
 import 'package:bang/View/ViewModel/PopularVillainViewModel/popular_villain_bloc.dart';
@@ -62,7 +64,11 @@ class _LandingPageState extends State<LandingPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        floatingActionButton: FloatingActionButton(onPressed: null, child: Icon(Icons.search, color: Colors.white,),backgroundColor: Colors.grey[400],),
+        floatingActionButton: FloatingActionButton(onPressed:(){
+      Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context){
+      return new SearchPage();
+      }));
+      }, child: Icon(Icons.search, color: Colors.white,),backgroundColor: Colors.grey[400],),
         backgroundColor: Colors.white,
 /*          appBar: AppBar(
             centerTitle: true,
@@ -126,7 +132,7 @@ class _LandingPageState extends State<LandingPage> {
                                   );
                                 }
                                 else if(state is RandomLoading){
-                                  return CircularProgressIndicator();
+                                  return Image.asset("asset/images/loading.gif",);
                                 }
                                 else if(state is RandomLoaded){
                                   return Swiper(itemCount:state.randomList.length,
@@ -160,24 +166,6 @@ class _LandingPageState extends State<LandingPage> {
                                   );
                                 }
                               },
-
-                              /*child: Swiper(itemCount:randHeroes.length,
-                              autoplay: true,
-                              loop: true,
-
-                              pagination: SwiperPagination(
-                                builder: DotSwiperPaginationBuilder(
-                                  space: 10,
-                                  activeColor: Colors.grey[400],
-
-                                ),
-                                alignment: Alignment.bottomCenter,
-                              ),
-                              //pagination:DotSwiperPaginationBuilder() ,
-                              layout: SwiperLayout.DEFAULT,
-                                  itemBuilder: (context, index) {
-                                    return randomHeroesWidget(randHeroes[index]);
-                                  }),*/
                             )
                           )),
                     ),
@@ -188,7 +176,7 @@ class _LandingPageState extends State<LandingPage> {
                       padding: const EdgeInsets.only(left:8.0),
                       child: Row(
                         children: <Widget>[
-                          Text("Popular Heroes", style: TextStyle(fontSize: 20, color: Colors.grey[400], fontWeight: FontWeight.bold, letterSpacing: 5),),
+                          Text("Popular Heroes", style: TextStyle(fontSize: 20, color: Colors.black.withOpacity(0.8), fontWeight: FontWeight.bold, letterSpacing: 5),),
                         ],
                       ),
                     ),
@@ -197,6 +185,7 @@ class _LandingPageState extends State<LandingPage> {
                     ),
                     Container(
                       height: 150,
+                        width: SizeConfig.screenWidthDp,
                         child: BlocBuilder(
                           bloc: _popularHeroesBloc,
                           builder: (BuildContext context, PopularHeroesState state ){
@@ -210,9 +199,7 @@ class _LandingPageState extends State<LandingPage> {
                               );
                             }
                             else if(state is PopularHeroesLoading){
-                              return Container(
-                                child: CircularProgressIndicator(),
-                              );
+                              return Image.asset("asset/images/loading.gif",);
                             }
                             else if(state is PopularHeroesLoaded){
                               return ListView.builder(itemBuilder: (BuildContext context, index){
@@ -229,16 +216,6 @@ class _LandingPageState extends State<LandingPage> {
                             }
                           },
                         )
-                      /*Provider.of<Popular>(context).popHeroes.length == null ? Container(
-                          child: CircularProgressIndicator(),
-                        ) : ListView.builder(itemBuilder: (BuildContext context, index){
-                          return popheroes(Provider.of<Popular>(context).popHeroes[index]);
-                        },
-                          itemCount: Provider.of<Popular>(context).popHeroes.length,
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                          padding: EdgeInsets.only(right: 8),
-                        )*/
                     ),
                     SizedBox(
                       height: 5,
@@ -247,7 +224,7 @@ class _LandingPageState extends State<LandingPage> {
                       padding: const EdgeInsets.only(left:8.0),
                       child: Row(
                         children: <Widget>[
-                          Text("Popular Villains", style: TextStyle(fontSize: 20, letterSpacing: 5,color: Colors.grey[400], fontWeight: FontWeight.bold),),
+                          Text("Popular Villains", style: TextStyle(fontSize: 20, letterSpacing: 5,color: Colors.black.withOpacity(0.8), fontWeight: FontWeight.bold),),
                         ],
                       ),
                     ),
@@ -270,7 +247,7 @@ class _LandingPageState extends State<LandingPage> {
                               );
                             }
                             else if(state is PopularVillainLoading){
-                              return CircularProgressIndicator();
+                              return Image.asset("asset/images/loading.gif");
                             }
                             else if(state is PopularVillainLoaded){
                               return ListView.builder(itemBuilder: (BuildContext context, index){
@@ -292,20 +269,9 @@ class _LandingPageState extends State<LandingPage> {
                               );
                             }
                           },
-
                         )
-
-                      /*ListView.builder(itemBuilder: (BuildContext context, index){
-                          return popheroes(
-                              Provider.of<Villains>(context).popularVil[index]
-                          );
-                        },
-                          itemCount: Provider.of<Villains>(context).popularVil.length,
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                        )*/
                     ),
-
+                    YMargin(50),
                   ],
                 ),
               ],
@@ -346,55 +312,67 @@ class _LandingPageState extends State<LandingPage> {
   }
 
   Widget popheroes(CharacterProfile characterProfile){
-    return GestureDetector(
-      onLongPress: (){
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal:10.0),
+      child: GestureDetector(
+        onLongPress: (){
 /*        var hell = _databaseProvider.getItAll();
-        print(hell);*/
-      },
-      onTap: (){
-        Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context){
-          return new Profile(characterProfile);
-        }));
-      },
-      child: Container(
-        height: 100,
-        width: 100,
-        padding: EdgeInsets.all(5),
+          print(hell);*/
+        },
+        onTap: (){
+          Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context){
+            return new Profile(characterProfile);
+          }));
+        },
         child: Container(
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
-              boxShadow: [
-                BoxShadow(
-                  color: Color.fromRGBO(143, 148, 251, 1),
-                  blurRadius: 5.0,
-                  //offset: Offset(0, 10)
-                )
-              ]
-          ),
+          height: 100,
+          width: 100,
+          padding: EdgeInsets.all(5),
+          child: Container(
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(25),
+                  bottomRight: Radius.circular(25)
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.8),
+                    blurRadius: 3.0,
+                    //offset: Offset(0, 10)
+                  )
+                ]
+            ),
 
-          child: Column(
-            children: <Widget>[
-              Container(
-                child: Card(child: Image.network(characterProfile.image.url, fit: BoxFit.cover,),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(80)),
-                clipBehavior: Clip.hardEdge,),
-              ),
-              SizedBox(
-                height: 5,
-              ),
-              GestureDetector(
-                onTap: () async{
-                  DatabaseProvider.instance.save(characterProfile);
-                },
-                child: Text(characterProfile.name, style: TextStyle(fontSize: 10, color: Colors.grey[400], fontWeight: FontWeight.bold, letterSpacing: 3),),
-              )
-            ],
+            child: Column(
+              children: <Widget>[
+                Container(
+                  child: Card(child: FadeInImage(
+                    fit: BoxFit.fill,
+                    imageErrorBuilder: (context, error, stackTrace) => Image.asset("asset/images/escanor.png"),
+                    placeholder: AssetImage("asset/images/escanor.png"),
+                    image: NetworkImage(characterProfile.image.url,)
+                  ),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(80)),
+                  clipBehavior: Clip.hardEdge,),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                GestureDetector(
+                  onTap: () async{
+                    DatabaseProvider.instance.save(characterProfile);
+                  },
+                  child:Text(characterProfile.name, style: TextStyle(fontSize: 6, color: Colors.black.withOpacity(0.8), fontWeight: FontWeight.bold, letterSpacing: 3,wordSpacing: 1,),),
+                )
+              ],
+            ),
           ),
         ),
       ),
     );
   }
+  //Widget Heyo(BuildContext context, Object object, StackTrace trace) => Container();
 
   Widget pageInd(){
     return Align(
