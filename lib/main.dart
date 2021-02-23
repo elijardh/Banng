@@ -7,6 +7,8 @@ import 'package:bang/utils/envConfig.dart';
 import 'package:bang/utils/size_config.dart';
 import 'package:bang/Controller/Services.dart';
 
+import 'View/Search.dart';
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -35,7 +37,7 @@ class MyApp extends StatelessWidget {
         Size size = MediaQuery.of(context).size;
         SizeConfig.init(context, width: size.width, height: size.height, allowFontScaling: true);
 
-        return LandingPage();
+        return SearchPage();
 
       }),
     );

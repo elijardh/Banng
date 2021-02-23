@@ -33,77 +33,100 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocBuilder(
-        bloc: _searchBloc,
-        builder: (BuildContext context, SearchState state) {
-          if (state is SearchInitial) {
-            return Container(
-                child: Column(children: [
+      body: SingleChildScrollView(
+        child: Container(
+          color: Colors.blue,
+          width: SizeConfig.screenWidthDp,
+          height: SizeConfig.screenHeightDp,
+          child: BlocBuilder(
+            bloc: _searchBloc,
+            builder: (BuildContext context, SearchState state) {
+              if (state is SearchInitial) {
+                return Container(
+                    child: Column(children: [
+                      YMargin(50),
+                      Container(
+                        height: config.sh(40),
+                        width: config.sw(300),
+                        color: Colors.white,
+                        child: TextField(
+                          controller: _searchController,
+                          onSubmitted: (value){
+                            _searchBloc.dispatch(Search(_searchController.value.text));
+                          },
+                        ),
+                      ),
+                    ]
+                    )
+                );
+              }
+              else if(state is SearchLoading){
+                return Container(
+                    child: Column(children: [
+                      YMargin(50),
+                      Container(
+                        height: config.sh(40),
+                        width: config.sw(300),
+                        color: Colors.white,
+                        child: TextField(
+                          controller: _searchController,
+                          onSubmitted: (value){
+                            _searchBloc.dispatch(Search(_searchController.value.text));
+                          },
+                        ),
+                      ),
+                      YMargin(50),
+                      Image.asset("asset/images/loading.gif"),
+                    ]
+                    )
+                );
+              }
+              else if( state is SearchLoaded){
+                return Container(
+                    child: Column(children: [
+                      YMargin(50),
+                      Container(
+                        height: config.sh(40),
+                        width: config.sw(300),
+                        color: Colors.white,
+                        child: TextField(
+                          controller: _searchController,
+                          onSubmitted: (value){
+                            _searchBloc.dispatch(Search(_searchController.value.text));
+                          },
+                        ),
+                      ),
+                      YMargin(50),
+                      Container(
+                        height: config.sh(500),
+                        child: ListView.builder(itemBuilder: (BuildContext context, index){
+                          return Text(state.characterProfileList.results[index].name);
+                        },
+                        itemCount: state.characterProfileList.results.length,),
+                      )
+                    ]
+                    )
+                );
+              }
+              else{
+                return Container(
+                  child:Text("Hello")
+                );
+              }
+            },
+            /*Container(
+              child: Column(
+                children: [
                   Container(
                     height: config.sh(40),
                     width: config.sw(300),
                     child: TextField(
                       controller: _searchController,
-                      onSubmitted: (value){
-                        _searchBloc.dispatch(Search(_searchController.value.text));
-                      },
-                    ),
-                  ),
-                ]
-                )
-            );
-          }
-          else if(state is SearchLoading){
-            return Container(
-                child: Column(children: [
-                  Container(
-                    height: config.sh(40),
-                    width: config.sw(300),
-                    child: TextField(
-                      controller: _searchController,
-                    ),
-                  ),
-                  YMargin(50),
-                  Image.asset("asset/images/loading.gif"),
-                ]
-                )
-            );
-          }
-          else if( state is SearchLoaded){
-            return Container(
-                child: Column(children: [
-                  Container(
-                    height: config.sh(40),
-                    width: config.sw(300),
-                    child: TextField(
-                      controller: _searchController,
-                    ),
-                  ),
-                  YMargin(50),
-                  ListView.builder(itemBuilder: (BuildContext context, index){
-                    return Text(state.characterProfileList.results[index].name);
-                  },)
-                ]
-                )
-            );
-          }
-          else{
-            return Container(
-              child:Text("Hello")
-            );
-          }
-        },
-        /*Container(
-          child: Column(
-            children: [
-              Container(
-                height: config.sh(40),
-                width: config.sw(300),
-                child: TextField(
-                  controller: _searchController,
 
-                ),
-              )*/
+                    ),
+                  )*/
+          ),
+        ),
       ),
     );
   }
