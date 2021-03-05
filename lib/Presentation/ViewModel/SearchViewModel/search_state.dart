@@ -17,3 +17,8 @@ class SearchLoaded extends SearchState{
   CharacterProfileList characterProfileList;
   SearchLoaded(this.characterProfileList);
 }
+
+class SearchFailed extends SearchState{
+  final String fail;
+  SearchFailed(this.fail);
+}

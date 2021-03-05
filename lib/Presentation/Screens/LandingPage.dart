@@ -1,23 +1,20 @@
+import 'package:bang/Presentation/ViewModel/LandingPageViewModel/random_bloc.dart';
+import 'package:bang/Presentation/ViewModel/PopularHeroesViewModel/popular_heroes_bloc.dart';
+import 'package:bang/Presentation/ViewModel/PopularVillainViewModel/popular_villain_bloc.dart';
+import 'package:bang/Presentation/Views/PopHeroView.dart';
+import 'package:bang/Presentation/Views/RandomHeroView.dart';
 import 'package:bang/utils/size_config.dart';
 import 'package:bang/widgets/texts.dart';
 import 'package:bang/widgets/y_margin.dart';
 import 'package:flutter/material.dart';
 import 'package:bang/Model/CharacterProfile.dart';
-import 'package:bang/Controller/Services.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:page_view_indicators/circle_page_indicator.dart';
-import 'package:bang/View/Profile.dart';
-import 'package:provider/provider.dart';
 import 'package:bang/Controller/Database.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
-import 'package:bang/View/Widgets.dart';
-import 'package:bloc/bloc.dart';
-
+import 'Profile.dart';
 import 'Search.dart';
-import 'ViewModel/LandingPageViewModel/random_bloc.dart';
-import 'ViewModel/PopularHeroesViewModel/popular_heroes_bloc.dart';
-import 'package:bang/View/ViewModel/PopularVillainViewModel/popular_villain_bloc.dart';
 
 class LandingPage extends StatefulWidget {
   @override
@@ -153,7 +150,7 @@ class _LandingPageState extends State<LandingPage> {
                                       //pagination:DotSwiperPaginationBuilder() ,
                                       layout: SwiperLayout.DEFAULT,
                                       itemBuilder: (context, index) {
-                                        return randomHeroesWidget(state.randomList[index]);
+                                        return randomHeroesWidget(state.randomList[index], context);
                                       });
                                 }
                                 else{
@@ -176,7 +173,7 @@ class _LandingPageState extends State<LandingPage> {
                       padding: const EdgeInsets.only(left:8.0),
                       child: Row(
                         children: <Widget>[
-                          Text("Popular Heroes", style: TextStyle(fontSize: 20, color: Colors.black.withOpacity(0.8), fontWeight: FontWeight.bold, letterSpacing: 5),),
+                          Text("Popular Heroes", style: TextStyle(fontSize: 20, color: Colors.black.withOpacity(0.8), fontWeight: FontWeight.bold, letterSpacing: 5, fontFamily: "defont"),),
                         ],
                       ),
                     ),
@@ -203,7 +200,7 @@ class _LandingPageState extends State<LandingPage> {
                             }
                             else if(state is PopularHeroesLoaded){
                               return ListView.builder(itemBuilder: (BuildContext context, index){
-                                return popheroes(state.heroList[index]);
+                                return popChar(state.heroList[index], context);
                               },
                                 itemCount: state.heroList.length,
                                 shrinkWrap: true,
@@ -224,7 +221,7 @@ class _LandingPageState extends State<LandingPage> {
                       padding: const EdgeInsets.only(left:8.0),
                       child: Row(
                         children: <Widget>[
-                          Text("Popular Villains", style: TextStyle(fontSize: 20, letterSpacing: 5,color: Colors.black.withOpacity(0.8), fontWeight: FontWeight.bold),),
+                          Text("Popular Villains", style: TextStyle(fontSize: 20, letterSpacing: 5,color: Colors.black.withOpacity(0.8), fontWeight: FontWeight.bold, fontFamily: "defont"),),
                         ],
                       ),
                     ),
@@ -251,8 +248,7 @@ class _LandingPageState extends State<LandingPage> {
                             }
                             else if(state is PopularVillainLoaded){
                               return ListView.builder(itemBuilder: (BuildContext context, index){
-                                return popheroes(state.list[index]
-                                );
+                                return popChar(state.list[index], context);
                               },
                                 itemCount: state.list.length,
                                 shrinkWrap: true,
@@ -310,70 +306,6 @@ class _LandingPageState extends State<LandingPage> {
       ),
     );
   }
-
-  Widget popheroes(CharacterProfile characterProfile){
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal:10.0),
-      child: GestureDetector(
-        onLongPress: (){
-/*        var hell = _databaseProvider.getItAll();
-          print(hell);*/
-        },
-        onTap: (){
-          Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context){
-            return new Profile(characterProfile);
-          }));
-        },
-        child: Container(
-          height: 100,
-          width: 100,
-          padding: EdgeInsets.all(5),
-          child: Container(
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(25),
-                  bottomRight: Radius.circular(25)
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.8),
-                    blurRadius: 3.0,
-                    //offset: Offset(0, 10)
-                  )
-                ]
-            ),
-
-            child: Column(
-              children: <Widget>[
-                Container(
-                  child: Card(child: FadeInImage(
-                    fit: BoxFit.fill,
-                    imageErrorBuilder: (context, error, stackTrace) => Image.asset("asset/images/escanor.png"),
-                    placeholder: AssetImage("asset/images/escanor.png"),
-                    image: NetworkImage(characterProfile.image.url,)
-                  ),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(80)),
-                  clipBehavior: Clip.hardEdge,),
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                GestureDetector(
-                  onTap: () async{
-                    DatabaseProvider.instance.save(characterProfile);
-                  },
-                  child:Text(characterProfile.name, style: TextStyle(fontSize: 6, color: Colors.black.withOpacity(0.8), fontWeight: FontWeight.bold, letterSpacing: 3,wordSpacing: 1,),),
-                )
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-  //Widget Heyo(BuildContext context, Object object, StackTrace trace) => Container();
-
   Widget pageInd(){
     return Align(
       alignment: Alignment.bottomCenter,

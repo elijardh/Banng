@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:core';
+import 'dart:io';
 
 import 'package:bang/Model/CharacterProfileList.dart';
 import 'package:flutter/cupertino.dart';
@@ -122,8 +123,22 @@ class SearchCharacter{
     String url = "https://superheroapi.com/api/1907388712734798/search/$charName";
     var response = await http.get(url);
     if(response.statusCode == 200){
+
+      String respons = json.decode(response.body)["response"];
+      if(respons == "error"){
+        throw HttpException(response.body);
+      }
+
+      if(json.decode(response.body)["response"]== "error"){
+        throw Exception(response.body);
+      }
       _characterProfileList = CharacterProfileList.fromJson(json.decode(response.body));
+      if(_characterProfileList.response == "success"){
+        return _characterProfileList;
+      }
     }
-    return _characterProfileList;
+    else{
+      throw Exception(response.body);
+    }
   }
 }

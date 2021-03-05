@@ -61,7 +61,7 @@ class _ProfileState extends State<Profile> {
               SizedBox(
                 height: 10,
               ),
-              Container(child: Center(child: Text(characterProfile.name, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black.withOpacity(0.8)),)),decoration: BoxDecoration(
+              Container(child: Center(child: Text(characterProfile.name, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black.withOpacity(0.8),fontFamily: "defont",letterSpacing: 2),)),decoration: BoxDecoration(
                   color: Colors.white,
                   boxShadow: [
                     BoxShadow(
@@ -76,7 +76,7 @@ class _ProfileState extends State<Profile> {
               SizedBox(
                 height: 10,
               ),
-              Container(child: Center(child: Text(characterProfile.biography.fullname, style: TextStyle(fontSize: 13,fontWeight:FontWeight.bold, color: Colors.black.withOpacity(0.8)),)),
+              Container(child: Center(child: Text(characterProfile.biography.fullname, style: TextStyle(fontSize: 13,fontWeight:FontWeight.bold, color: Colors.black.withOpacity(0.8),fontFamily: "defont",letterSpacing: 2),)),
               decoration: BoxDecoration(
                   color: Colors.white,
                   boxShadow: [
@@ -93,7 +93,7 @@ class _ProfileState extends State<Profile> {
                 height:10
               ),
               Container(
-                child:Center(child: Text(characterProfile.biography.publisher, style: TextStyle(color: Colors.black.withOpacity(0.8)),)),
+                child:Center(child: Text(characterProfile.biography.publisher, style: TextStyle(color: Colors.black.withOpacity(0.8),fontFamily: "defont", letterSpacing: 2),)),
                 decoration: BoxDecoration(
                     color: Colors.white,
                     boxShadow: [

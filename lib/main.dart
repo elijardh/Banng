@@ -1,13 +1,13 @@
+import 'package:bang/Presentation/Screens/Search.dart';
 import 'package:flutter/material.dart';
-import 'package:bang/View/LandingPage.dart';
-import 'package:bang/View/Profile.dart';
 import 'package:provider/provider.dart';
 import 'Model/CharacterProfile.dart';
 import 'package:bang/utils/envConfig.dart';
 import 'package:bang/utils/size_config.dart';
 import 'package:bang/Controller/Services.dart';
 
-import 'View/Search.dart';
+import 'Presentation/Screens/LandingPage.dart';
+
 
 void main() => runApp(MyApp());
 
@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
         Size size = MediaQuery.of(context).size;
         SizeConfig.init(context, width: size.width, height: size.height, allowFontScaling: true);
 
-        return SearchPage();
+        return LandingPage();
 
       }),
     );
