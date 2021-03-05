@@ -7,6 +7,7 @@ import 'package:bang/utils/size_config.dart';
 import 'package:bang/Controller/Services.dart';
 
 import 'Presentation/Screens/LandingPage.dart';
+import 'Presentation/Screens/splashscreen.dart';
 
 
 void main() => runApp(MyApp());
@@ -37,7 +38,7 @@ class MyApp extends StatelessWidget {
         Size size = MediaQuery.of(context).size;
         SizeConfig.init(context, width: size.width, height: size.height, allowFontScaling: true);
 
-        return LandingPage();
+        return PlashScreen();
 
       }),
     );
